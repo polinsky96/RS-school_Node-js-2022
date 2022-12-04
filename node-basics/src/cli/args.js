@@ -1,5 +1,12 @@
+import { argv } from 'node:process';
+
 const parseArgs = () => {
-    // Write your code here 
+    return argv.slice(2)
+        .reduce((acc, cur, i, arr) => {
+            if (i % 2 === 0) acc.push(`${cur} is ${arr[i + 1]}`);
+            return acc
+        }, []).join(', ')
+    
 };
 
-parseArgs();
+console.log(parseArgs());
