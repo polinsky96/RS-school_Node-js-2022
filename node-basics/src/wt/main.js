@@ -6,10 +6,10 @@ import os from 'os'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const workerPath = path.join(__dirname, './worker.js');
 
 const performCalculations = async () => {
     const coresLength = os.cpus().length;
-    const workerPath = path.join(__dirname, './worker.js');
     const workersPool = {};
     let waitingWorkers = [];
     const results = [];

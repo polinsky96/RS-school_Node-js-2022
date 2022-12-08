@@ -1,26 +1,18 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { unlink, access } from 'node:fs';
+import fs from 'fs/promises';
+import { MY_ERROR } from './libs/fs/constants.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const filePath = path.join(__dirname, './files/fileToRemove.txt');
 
 const remove = async () => {
-    const filePath = path.join(__dirname, './files/fileToRemove.txt');
-
-    const myError = 'FS operation failed';
-
     try {
-        access(filePath, (err) => {
-            if (err) {
-                throw Error(myError)
-            }
-        });
-
-        unlink(filePath, (err) => {
-            if (err) throw Error(myError);
-        });
-        
+        await fs.unlink(filePath);
     } catch (error) {
-        console.log(error);
+        console.log(MY_ERROR);
     }
 };
 
