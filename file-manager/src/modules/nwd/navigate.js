@@ -1,20 +1,15 @@
-import fs from 'fs/promises';
 import path from 'path';
 
 process.chdir(process.env.HOME);
 
 const consoleDirectory = () => {
-    console.log(`You are currently in ${process.cwd()}\n`);
+    console.log(`\nYou are currently in ${process.cwd()}`);
 }
 
-const changeDirectory = async (command) => {
-    let segment;
+//FIXME: add go to :d
 
-    if (command[0] === 'up') {
-        segment = '..';
-    } else {
-        segment = command[1];
-    }
+const changeDirectory = async (command) => {
+    let segment = command[0] === 'up' ? '..' : command[1];
     
     if (!segment) {
         process.chdir(process.env.HOME);
@@ -24,11 +19,9 @@ const changeDirectory = async (command) => {
         try {
             process.chdir(newPath);
         } catch {
-            console.log('directory isn\'t exists\n');
+            console.log('\ndirectory isn\'t exists\n');
         }
     }
-
-    consoleDirectory();
 }
 
 export {
