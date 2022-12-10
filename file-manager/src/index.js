@@ -5,6 +5,8 @@ import commandParser from './parsers/commandParser.js';
 import { changeDirectory, consoleDirectory, list } from './modules/nwd/index.js';
 import { setFileCommand, isFileCommand } from './modules/file/file.js';
 import getOSinformation from './modules/os/index.js';
+import calculateHash from './modules/hash/hash.js';
+import compress from './modules/compress/index.js';
 
 const usernameArg = process.argv
     .slice(2)
@@ -25,12 +27,14 @@ process.on('exit', () => {
 });
 
 console.log(`Welcome to the File Manager, ${username}!`);
-
+consoleDirectory();
 
 const rl = createInterface({
     input: process.stdin,
     output: process.stdout
 });
+
+compress(['compress', 'test.txt', 'C:\\Users\\johnp_000\\testFolder\\']);
 
 rl.on('line', (input) => {
     const command = commandParser(input);
@@ -56,6 +60,14 @@ rl.on('line', (input) => {
             getOSinformation(command[1]);
             break;
 
+        case 'hash':
+            calculateHash(command[1]);
+            break;
+
+        case 'compress': 
+            compress(command);
+            break;
+
         default:
             console.log('invalid command');
             break;
@@ -63,5 +75,3 @@ rl.on('line', (input) => {
 
     consoleDirectory();
 });
-
-consoleDirectory();
