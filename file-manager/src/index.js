@@ -13,12 +13,14 @@ const usernameArg = process.argv
     .slice(2)
     .filter(arg => arg.includes('--username'));
 
+//set default username;
 let username = 'User';
 
 if (usernameArg.length !== 0) {
     username = usernameArg[0].replace('--username=', '');
 }
 
+//catch ctrl + C;
 process.on('SIGINT', () => {
     process.exit(0);
 });
@@ -28,6 +30,8 @@ process.on('exit', () => {
 });
 
 console.log(`Welcome to the File Manager, ${username}!`);
+
+//Show the current directory on first launch;
 consoleDirectory();
 
 const rl = createInterface({
@@ -35,8 +39,10 @@ const rl = createInterface({
     output: process.stdout
 });
 
-
+//Functions such as: cp, mv, compress, decompress take the path of the new directory in the form
+// 'C:\Users\some-user\...';
 rl.on('line', (input) => {
+    //['command', 'sourceFile', ?'finiteFile'];
     const command = commandParser(input);
 
     switch (command[0]) {
@@ -52,6 +58,7 @@ rl.on('line', (input) => {
             list();
             break;
 
+        //The module "file" provides a list of valid commands
         case isFileCommand(command[0]):
             setFileCommand(command);
             break;

@@ -12,11 +12,8 @@ const avaliableCommands = [ 'cat', 'add', 'rn', 'cp', 'mv', 'rm' ];
 const isFileCommand = (command) => {
     const index = avaliableCommands.indexOf(command)
 
-    if (index !== -1) {
-        return avaliableCommands[index];
-    } else {
-        return false
-    }
+
+    return index !== -1 ? avaliableCommands[index] : false;
 }
 
 const setFileCommand = (command) => {
