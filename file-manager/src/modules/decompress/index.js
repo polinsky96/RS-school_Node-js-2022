@@ -1,12 +1,11 @@
 import path from 'path';
 import zlib from 'zlib';
-import { pipeline } from 'stream';
 import { createReadStream, createWriteStream } from 'fs';
 import { access } from 'fs/promises';
-import { operationFailed } from '../libs/modules/constants/error.js';
 import getAbsolutePath from '../libs/modules/path/getAbsolutePath.js';
+import { operationFailed } from '../libs/modules/constants/error.js';
 
-const compress = async (command) => {
+const decompress = async (command) => {
     const fileName = command[1];
     const pathToFile = getAbsolutePath(command[1]);
     const pathToDestination = command[2];
@@ -14,25 +13,21 @@ const compress = async (command) => {
     try {
         await access(pathToFile);
 
-        const newFilePath = path.join(pathToDestination, fileName + '.br');
-
+        const newFilePath = path.join(pathToDestination, fileName.replace('.br', ''));
+        
         const readableStream = createReadStream(pathToFile);
         const writeableStream = createWriteStream(newFilePath);
-        const brotli = zlib.createBrotliCompress();
+        const brotli = zlib.createBrotliDecompress();
 
-        pipeline(
-            readableStream,
-            brotli,
-            writeableStream,
-            (err) => {
-                if (err) {
-                    console.log(operationFailed);
-                }
-            } 
-        )
+        readableStream.pipe(brotli).pipe(writeableStream).on('finish', (err) => {
+            if (err) {
+                console.log(operationFailed);
+            }
+        });
+
     } catch(err) {
         console.log(operationFailed);
     }
 }
 
-export default compress;
+export default decompress;

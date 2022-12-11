@@ -7,6 +7,7 @@ import { setFileCommand, isFileCommand } from './modules/file/file.js';
 import getOSinformation from './modules/os/index.js';
 import calculateHash from './modules/hash/hash.js';
 import compress from './modules/compress/index.js';
+import decompress from './modules/decompress/index.js';
 
 const usernameArg = process.argv
     .slice(2)
@@ -34,7 +35,6 @@ const rl = createInterface({
     output: process.stdout
 });
 
-compress(['compress', 'test.txt', 'C:\\Users\\johnp_000\\testFolder\\']);
 
 rl.on('line', (input) => {
     const command = commandParser(input);
@@ -66,6 +66,10 @@ rl.on('line', (input) => {
 
         case 'compress': 
             compress(command);
+            break;
+
+        case 'decompress':
+            decompress(command);
             break;
 
         default:
